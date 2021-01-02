@@ -31,7 +31,7 @@ class Keyboards:
             keys=[':back: Back']
         )
         self.host_game = create_keyboard(
-            keys=[':arrow_right: Next', ':back: Back']
+            keys=[':arrow_right: Next', ':x: Leave']
         )
 
 

@@ -5,7 +5,7 @@ import os
 db = MySQLDatabase(
     'mafiabot',
     user='mafiabot',
-    password=os.getenv("mafiabotdb_password"),
+    password="R$7ZLFb{O}AvK_o&Rjq|",
     host='localhost',
     port=3306
 )
@@ -16,13 +16,14 @@ class BaseModel(Model):
 
 
 class Tracker(BaseModel):
-    username = IntegerField(unique=True)
+    username = IntegerField(primary_key=True)
     state = TextField(default='start')
 
 
 class Game(BaseModel):
+    username = IntegerField(primary_key=True)
     code = TextField()
-    username = IntegerField(unique=True)
+
     role = TextField()
     health_status = TextField(default="Alive")
     message_id = IntegerField()
