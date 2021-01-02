@@ -1,0 +1,9 @@
+{
+  "prerun": "# some code here",
+  "directory": "migrations",
+  "history": "migratehistory",
+  "models": [
+    "models.Tracker",
+    "models.Game"
+  ]
+}

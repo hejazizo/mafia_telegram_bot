@@ -1,0 +1,6 @@
+pyTelegramBotAPI
+emoji
+peewee
+peewee-migrations
+PyMySQL
+cryptography
