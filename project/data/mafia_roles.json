@@ -1,0 +1,40 @@
+{
+    "inline_keyboard": [
+        [
+            {
+                "text": "رییس مافیا",
+                "callback_data": "shadow_mafia"
+            }
+        ],
+        [
+            {
+                "text": "مافیای روانی",
+                "callback_data": "shadow_mafia"
+            },
+            {
+                "text": "مافیای گانگستر",
+                "callback_data": "shadow_mafia"
+            }
+        ],
+        [
+            {
+                "text": "مافیای مذاکره کننده",
+                "callback_data": "shadow_mafia"
+            },
+            {
+                "text": "مافیای تروریست",
+                "callback_data": "shadow_mafia"
+            }
+        ],
+        [
+            {
+                "text": "جادوگر",
+                "callback_data": "shadow_mafia"
+            },
+            {
+                "text": "مافیای سایه",
+                "callback_data": "shadow_mafia"
+            }
+        ]
+    ]
+}

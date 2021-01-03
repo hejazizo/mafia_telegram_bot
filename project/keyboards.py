@@ -21,17 +21,26 @@ def create_keyboard(keys, row_width=2, use_aliases=True):
         )
     return markup
 
+def create_inline_keyboard(json_string):
+    markup = types.InlineKeyboardMarkup.de_json(json_string)
+    return markup
 
 class Keyboards:
     def __init__(self):
         self.main = create_keyboard(
-            keys=[":computer: Host a Game", ":game_die: Join a Game"]
+            keys=[":desktop_computer: Host a Game", ":game_die: Join a Game"]
         )
         self.join_game = create_keyboard(
-            keys=[':back: Back']
+            keys=[':cross_mark: Leave']
         )
         self.host_game = create_keyboard(
             keys=[':arrow_right: Next', ':x: Leave']
+        )
+        self.mafia_roles = create_inline_keyboard(
+            json_string=open('./data/mafia_roles.json').read()
+        )
+        self.citizen_roles = create_inline_keyboard(
+            json_string=open('./data/citizen_roles.json').read()
         )
 
 

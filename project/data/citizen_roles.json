@@ -1,0 +1,84 @@
+{
+    "inline_keyboard": [
+        [
+            {
+                "text": "شهروند وفادار",
+                "callback_data": "loyal_citizen"
+            },
+            {
+                "text": "شهروند ساده",
+                "callback_data": "normal_citizen"
+            }
+        ],
+        [
+            {
+                "text": "پزشک",
+                "callback_data": "doctor"
+            },
+            {
+                "text": "پرستار",
+                "callback_data": "nurse"
+            }
+        ],
+        [
+            {
+                "text": "کابوی",
+                "callback_data": "cowboy"
+            },
+            {
+                "text": "آدم برفی",
+                "callback_data": "snowman"
+            }
+        ],
+        [
+            {
+                "text": "تک‌ تیر انداز",
+                "callback_data": "sniper"
+            },
+            {
+                "text": "کشیش",
+                "callback_data": "priest"
+            }
+        ],
+        [
+            {
+                "text": "تفنگدار",
+                "callback_data": "gunman"
+            },
+            {
+                "text": "زره پوش",
+                "callback_data": "armored"
+            }
+        ],
+        [
+            {
+                "text": "خبرنگار",
+                "callback_data": "reporter"
+            },
+            {
+                "text": "بازپرس",
+                "callback_data": "interrogator"
+            }
+        ],
+        [
+            {
+                "text": "کارآگاه",
+                "callback_data": "detective"
+            },
+            {
+                "text": "مسیح",
+                "callback_data": "jesus"
+            }
+        ],
+        [
+            {
+                "text": "پستچی",
+                "callback_data": "postman"
+            },
+            {
+                "text": "معشوقه",
+                "callback_data": "lover"
+            }
+        ]
+    ]
+}

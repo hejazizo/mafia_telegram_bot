@@ -4,6 +4,7 @@
   "history": "migratehistory",
   "models": [
     "models.Tracker",
-    "models.Game"
+    "models.Game",
+    "models.User"
   ]
 }

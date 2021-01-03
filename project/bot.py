@@ -6,5 +6,5 @@ import telebot
 # HTML or MARKDOWN
 # ------------------------------------
 bot = telebot.TeleBot(
-    os.getenv('mafia_telegram_bot'), parse_mode="MARKDOWN"
+    os.getenv('mafia_telegram_bot'), parse_mode="HTML"
 )

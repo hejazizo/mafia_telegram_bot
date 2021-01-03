@@ -14,16 +14,24 @@ class BaseModel(Model):
     class Meta:
         database = db
 
+class User(BaseModel):
+    id = IntegerField(primary_key=True)
+    name = TextField()
+    username = TextField()
+    chat_id = IntegerField(unique=True)
 
 class Tracker(BaseModel):
-    username = IntegerField(primary_key=True)
+    id = IntegerField(primary_key=True)
     state = TextField(default='start')
 
-
 class Game(BaseModel):
-    username = IntegerField(primary_key=True)
+    id = IntegerField(primary_key=True)
+    user = ForeignKeyField(model=User)
+
     code = TextField()
 
     role = TextField()
     health_status = TextField(default="Alive")
     message_id = IntegerField()
+
+    state = TextField(default="start")
