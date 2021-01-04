@@ -1,5 +1,7 @@
 from actions import *
 from project.actions.utils import generate_users_list
+from project.constants import ROLES
+from project.utils import next_n
 
 def host_start(message, user):
     # generate a 4 digit code (example: DGFH, AQGN, ...)
@@ -42,7 +44,7 @@ def host_leave(message, user):
     code = Game.get(Game.user==user).code
     game = Game.select().where(Game.code==code)
 
-    for ind, row in enumerate(game):
+    for row in game:
         # update tracker
         Tracker.update(state='start').where(Tracker.id==row.user.id).execute()
 
@@ -59,6 +61,26 @@ def host_leave(message, user):
 def host_select_roles(message, user):
     code = Game.get(Game.user==user).code
     num_players = Game.select().where(Game.code==code).count()
-    send_message(message.chat.id, f"Select {num_players} roles...")
-    send_message(message.chat.id, f":smiling_face_with_horns: Select Mafia Roles:", reply_markup=keyboards.mafia_roles)
-    send_message(message.chat.id, f":man_police_officer_light_skin_tone: Select Citizen Roles:", reply_markup=keyboards.citizen_roles)
+    send_message(
+        message.chat.id, f":high_voltage: You have to select {num_players} roles now...",
+        reply_markup=keyboards.send_roles
+    )
+
+    send_poll(message.chat.id, "mafia")
+    send_poll(message.chat.id, "citizen")
+    # send_message(message.chat.id, f":smiling_face_with_horns: Select Mafia Roles:", reply_markup=keyboards.mafia_roles)
+    # send_message(message.chat.id, f":man_police_officer_light_skin_tone: Select Citizen Roles:", reply_markup=keyboards.citizen_roles)
+
+
+def send_poll(chat_id, role_type):
+    roles = iter(ROLES[role_type])
+    batch = next_n(roles, 10)
+    while batch:
+        bot.send_poll(
+            chat_id, question=f"Select {role_type.upper()} Roles:",
+            options=batch,
+            is_anonymous=False,
+            allows_multiple_answers=True,
+        )
+        batch = next_n(roles, 10)
+

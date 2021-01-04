@@ -18,7 +18,6 @@ class User(BaseModel):
     id = IntegerField(primary_key=True)
     name = TextField()
     username = TextField()
-    chat_id = IntegerField(unique=True)
 
 class Tracker(BaseModel):
     id = IntegerField(primary_key=True)
