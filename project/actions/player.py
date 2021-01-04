@@ -17,9 +17,11 @@ def player_start(message, user):
         # update list of players
         # 1. get game code 2. delete player from list
         # 3. update players for everybody in the game
-        code = Game.get(Game.user==user).code
-        Game.delete().where(Game.user==user).execute()
-        update_users_list(code)
+        game = Game.get_or_none(Game.user==user)
+        if game:
+            code = game.code
+            Game.delete().where(Game.user==user).execute()
+            update_users_list(code)
 
     # enter code to join a game
     elif re.match(join_code_pattern, message.text):
@@ -45,6 +47,7 @@ def player_start(message, user):
             out_message = send_message(
                 message.chat.id,
                 emoji.emojize(response),
+                reply_markup=keyboards.join_game,
             )
 
             # update message id and edit user messages
@@ -58,7 +61,6 @@ def player_start(message, user):
                 message.chat.id,
                 emoji.emojize(response),
                 reply_markup=keyboards.main,
-                parse_mode=None,
             )
 
     else:

@@ -4,19 +4,15 @@ from project.utils import edit_message_text
 def generate_users_list(game, code, state_info=None):
 
     response = ":game_die: Mafia Game\n"
-    response += f":input_latin_uppercase: Join Code: <code>{code}</code>\n"
-    for ind, row in enumerate(game):
-        if row.role == 'GOD':
-            response += f":smiling_face_with_halo: <b>GOD</b>: {row.user.name} (@{row.user.username})\n\n"
-            response += ":busts_in_silhouette: Players\n"
-            continue
-        response += f"{ind}. {row.user.name} (@{row.user.username}) \n"
+    response += f":input_latin_uppercase: Join Code: <code>{code}</code>\n\n"
 
-    if not state_info:
-        state_info = "Waiting for host to accept players..."
+    response += ":busts_in_silhouette: Players\n"
+    for ind, row in enumerate(game):
+        response += f"{ind+1}. <b>{row.user.name}</b> (@{row.user.username}) \n"
 
     response += "\n"
-    response += state_info
+    response += ":hourglass_not_done: Waiting for other players to join...\n"
+    response += f":link: Invite Link: https://t.me/Mafianetgame_bot?start={code}"
 
     return response
 

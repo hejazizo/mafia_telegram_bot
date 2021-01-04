@@ -32,7 +32,8 @@ def edit_message_text(text, chat_id, message_id, emojize=True):
         error_text = f"Unable to edit message for {chat_id}.\n\n"
         error_text += "Message content:\n\n"
         error_text += text
-        return bot.send_message(chat_id=DEFAULT_CHAT_ID, text=error_text)
+        # bot.send_message(chat_id=DEFAULT_CHAT_ID, text=error_text)
+        return
 
 def next_n(iterator, N):
     """

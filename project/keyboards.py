@@ -36,9 +36,8 @@ class Keyboards:
         self.host_game = create_keyboard(
             keys=[':arrow_right: Next', ':x: Leave']
         )
-
         self.send_roles = create_keyboard(
-            keys=[":email: Send roles", ":cross_mark: Leave",]
+            keys=[":envelope: Send Roles", ":cross_mark: Leave",]
         )
 
 # ------------------------------------

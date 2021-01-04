@@ -61,8 +61,7 @@ def host_leave(message, user):
     Poll.delete().where(Poll.user==user).execute()
 
 def host_select_roles(message, user):
-    code = Game.get(Game.user==user).code
-    players = Game.select().where(Game.code==code)
+    players = get_players(user)
     send_message(
         message.chat.id, f":high_voltage: You have to select {len(players)} roles now...",
         reply_markup=keyboards.send_roles
@@ -78,6 +77,26 @@ def host_select_roles(message, user):
     # send_message(message.chat.id, f":man_police_officer_light_skin_tone: Select Citizen Roles:", reply_markup=keyboards.citizen_roles)
 
 
+def host_send_roles(message, user):
+    players = get_players(user)
+    roles = get_roles(user)
+
+    if len(players) > len(roles):
+        send_message(user.id, ":cross_mark: " f"تعداد بازیکن‌ها بیشتر از نقش‌هاست.")
+        return
+    if len(players) < len(roles):
+        send_message(user.id, ":cross_mark: " f"تعداد بازیکن‌ها کمتر از نقش‌هاست.")
+        return
+
+    # shuffle players and send their roles.
+    players_id = [player.user.id for player in players]
+    random.shuffle(players_id)
+    for role, player_id in zip(roles, players_id):
+        text = "<b>"
+        text += f":bust_in_silhouette: نقش شما: {role}"
+        text += "</b>"
+        send_message(player_id, text)
+
 def send_current_roles(user, poll, num_players, edit=False):
 
     text = ":busts_in_silhouette: نقش‌های انتخاب شده:\n\n"
@@ -88,12 +107,24 @@ def send_current_roles(user, poll, num_players, edit=False):
     if len(poll) > num_players:
         text += ":warning_selector: <b>"
         text += f"{convert_numbers.english_to_persian(len(poll)-num_players)} "
-        text += "نقش را حذف کنید."
+        text += "نقش را حذف کنید.\n"
+        text += " ("
+        text += f"تعداد بازیکن‌ها: {num_players} | "
+        text += f"تعداد نقش‌ها: {len(poll)}"
+        text += ")"
         text += "</b>"
     elif len(poll) < num_players:
         text += ":warning_selector: <b>"
         text += f"{convert_numbers.english_to_persian(num_players-len(poll))} "
-        text += "نقش دیگر انتخاب کنید."
+        text += "نقش دیگر انتخاب کنید.\n"
+        text += " ("
+        text += f"تعداد بازیکن‌ها: {num_players} - "
+        text += f"تعداد نقش‌ها: {len(poll)}"
+        text += ")"
+        text += "</b>"
+    else:
+        text += ":white_heavy_check_mark: <b>"
+        text += "تعداد نقش‌ها و بازیکن‌ها مساوی است."
         text += "</b>"
 
     if edit:
@@ -141,10 +172,20 @@ def host_roles_poll(poll):
         ).execute()
 
     user=User.get(id=poll.user.id)
-    game_code = Game.get(Game.user==user).code
-    players = Game.select().where(Game.code==game_code)
+    players = get_players(user)
 
     # retrieve data from poll db
     poll = Poll.select().where(Poll.user==user, Poll.checked==True)
     for player in players:
         send_current_roles(player.user, poll, len(players), edit=True)
+
+
+def get_players(user):
+    game_code = Game.get(Game.user==user).code
+    players = Game.select().where(Game.code==game_code)
+
+    return players
+
+def get_roles(user):
+    poll = Poll.select().where(Poll.user==user, Poll.checked==True)
+    return [row.option for row in poll]
