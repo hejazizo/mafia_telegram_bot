@@ -1,7 +1,7 @@
 from bot import bot
 
 from keyboards import keyboards
-from respond import respond_message
+from respond import respond_message, respond_poll
 from models import Tracker, User, Game
 import emoji
 from pprint import pprint
@@ -39,8 +39,8 @@ def send_welcome(message):
     )
 
 @bot.poll_answer_handler()
-def pole(pole_result):
-    print(pole_result)
+def poll_handler(poll):
+    respond_poll(poll)
 
 def handle_messages(messages):
     for message in messages:

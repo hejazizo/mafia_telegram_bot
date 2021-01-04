@@ -5,6 +5,7 @@
   "models": [
     "models.Tracker",
     "models.Game",
-    "models.User"
+    "models.User",
+    "models.Poll"
   ]
 }

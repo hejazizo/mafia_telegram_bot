@@ -4,3 +4,4 @@ peewee
 peewee-migrations
 PyMySQL
 cryptography
+convert-numbers

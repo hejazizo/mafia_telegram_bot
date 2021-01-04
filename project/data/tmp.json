@@ -1,0 +1,147 @@
+{
+    "content_type": "poll",
+    "id": 1894,
+    "message_id": 1894,
+    "from_user": {
+        "id": 1461874730,
+        "is_bot": "True",
+        "first_name": "Mafia",
+        "username": "mafianetgame_bot",
+        "last_name": "True",
+        "language_code": "True",
+        "can_join_groups": "True",
+        "can_read_all_group_messages": "True",
+        "supports_inline_queries": "True"
+    },
+    "date": 1609748752,
+    "chat": {
+        "id": 73106435,
+        "type": "private",
+        "title": "True",
+        "username": "Aliii_H93",
+        "first_name": "Ali",
+        "last_name": "Hejazi",
+        "all_members_are_administrators": "True",
+        "photo": "True",
+        "description": "True",
+        "invite_link": "True",
+        "pinned_message": "True",
+        "permissions": "True",
+        "slow_mode_delay": "True",
+        "sticker_set_name": "True",
+        "can_set_sticker_set": "True"
+    },
+    "forward_from": "True",
+    "forward_from_chat": "True",
+    "forward_from_message_id": "True",
+    "forward_signature": "True",
+    "forward_sender_name": "True",
+    "forward_date": "True",
+    "reply_to_message": "True",
+    "edit_date": "True",
+    "media_group_id": "True",
+    "author_signature": "True",
+    "text": "True",
+    "entities": "True",
+    "caption_entities": "True",
+    "audio": "True",
+    "document": "True",
+    "photo": "True",
+    "sticker": "True",
+    "video": "True",
+    "video_note": "True",
+    "voice": "True",
+    "caption": "True",
+    "contact": "True",
+    "location": "True",
+    "venue": "True",
+    "animation": "True",
+    "dice": "True",
+    "new_chat_member": "True",
+    "new_chat_members": "True",
+    "left_chat_member": "True",
+    "new_chat_title": "True",
+    "new_chat_photo": "True",
+    "delete_chat_photo": "True",
+    "group_chat_created": "True",
+    "supergroup_chat_created": "True",
+    "channel_chat_created": "True",
+    "migrate_to_chat_id": "True",
+    "migrate_from_chat_id": "True",
+    "pinned_message": "True",
+    "invoice": "True",
+    "successful_payment": "True",
+    "connected_website": "True",
+    "reply_markup": "True",
+    "poll": {
+        "id": "6021485106076581942",
+        "question": "Select MAFIA Roles:",
+        "options": [],
+        "total_voter_count": 0,
+        "is_closed": "True",
+        "is_anonymous": "True",
+        "type": "regular",
+        "allows_multiple_answers": "True",
+        "correct_option_id": "True",
+        "explanation": "True",
+        "explanation_entities": "True",
+        "open_period": "True",
+        "close_date": "True"
+    },
+    "json": {
+        "message_id": 1894,
+        "from": {
+            "id": 1461874730,
+            "is_bot": "True",
+            "first_name": "Mafia",
+            "username": "mafianetgame_bot"
+        },
+        "chat": {
+            "id": 73106435,
+            "first_name": "Ali",
+            "last_name": "Hejazi",
+            "username": "Aliii_H93",
+            "type": "private"
+        },
+        "date": 1609748752,
+        "poll": {
+            "id": "6021485106076581942",
+            "question": "Select MAFIA Roles:",
+            "options": [
+                {
+                    "text": "رییس مافیا",
+                    "voter_count": 0
+                },
+                {
+                    "text": "مافیای روانی",
+                    "voter_count": 0
+                },
+                {
+                    "text": "مافیای گانگستر",
+                    "voter_count": 0
+                },
+                {
+                    "text": "مافیای مذاکره کننده",
+                    "voter_count": 0
+                },
+                {
+                    "text": "مافیای تروریست",
+                    "voter_count": 0
+                },
+                {
+                    "text": "جادوگر",
+                    "voter_count": 0
+                },
+                {
+                    "text": "مافیای سایه",
+                    "voter_count": 0
+                }
+            ],
+            "total_voter_count": 0,
+            "is_closed": "True",
+            "is_anonymous": "True",
+            "type": "regular",
+            "allows_multiple_answers": "True"
+        }
+    }
+}

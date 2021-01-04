@@ -6,9 +6,9 @@ import emoji
 
 from bot import bot
 from keyboards import create_keyboard, keyboards
-from models import Game, Tracker, db, User
+from models import Game, Tracker, db, User, Poll
 from constants import BOT_ID
-from actions.host import host_start, host_leave, host_select_roles
+from actions.host import host_start, host_leave, host_select_roles, host_roles_poll
 from actions.player import player_start, player_leave
 from actions.utils import generate_users_list, update_users_list
 
@@ -49,3 +49,9 @@ def respond_message(message):
 
     elif t.state == 'join_game':
         player_start(message, user)
+
+
+def respond_poll(poll):
+    host_roles_poll(poll)
+
+

@@ -30,7 +30,15 @@ class Game(BaseModel):
     code = TextField()
 
     role = TextField()
+    mafia_role = TextField()
     health_status = TextField(default="Alive")
     message_id = IntegerField()
 
     state = TextField(default="start")
+
+class Poll(BaseModel):
+    poll_id = BigIntegerField()
+    user = ForeignKeyField(model=User)
+    option_id = IntegerField()
+    option = TextField()
+    checked = BooleanField(default=False)
