@@ -1,5 +1,5 @@
 from actions import *
-from project.utils import edit_message_text
+from utils import edit_message_text
 
 def generate_users_list(game, code, state_info=None):
 

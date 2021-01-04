@@ -1,5 +1,5 @@
 from actions import *
-from project.actions.utils import update_users_list, generate_users_list
+from actions.utils import update_users_list, generate_users_list
 
 def player_start(message, user):
     join_code_pattern = r"^\w{4}$"

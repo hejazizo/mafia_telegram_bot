@@ -1,7 +1,7 @@
 from actions import *
-from project.actions.utils import generate_users_list
-from project.constants import ROLES
-from project.utils import next_n
+from actions.utils import generate_users_list
+from constants import ROLES
+from utils import next_n
 
 
 def host_start(message, user):

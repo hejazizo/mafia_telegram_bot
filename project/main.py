@@ -1,14 +1,22 @@
-from bot import bot
+import re
+import sys
+from pathlib import Path
 
-from keyboards import keyboards
-from respond import respond_message, respond_poll, register_user
-from models import Tracker, User, Game
-import emoji
+PROJECT_PATH = Path(__file__).parent.absolute()
+sys.path.append(PROJECT_PATH)
+
 from pprint import pprint
-from utils import send_message
+
+import emoji
+
 from actions.host import host_leave
 from actions.player import player_leave, player_start
-import re
+from bot import bot
+from keyboards import keyboards
+from models import Game, Tracker, User
+from respond import register_user, respond_message, respond_poll
+from utils import send_message
+
 
 # ------------------------------------
 # Message Handlers

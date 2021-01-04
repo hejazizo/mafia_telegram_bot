@@ -12,7 +12,7 @@ from bot import bot
 from constants import BOT_ID
 from keyboards import create_keyboard, keyboards
 from models import Game, Poll, Tracker, User, db
-from project.utils import send_message
+from utils import send_message
 
 # ------------------------------------
 # Connect to database
