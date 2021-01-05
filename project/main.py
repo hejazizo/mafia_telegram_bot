@@ -14,7 +14,7 @@ from actions.player import player_leave, player_start
 from bot import bot
 from keyboards import keyboards
 from models import Game, Tracker, User
-from respond import register_user, respond_message, respond_poll
+from respond import register_user, respond_message, respond_poll, respond_callback
 from utils import send_message
 
 
@@ -29,6 +29,11 @@ def handle_messages(messages):
     for message in messages:
         print(emoji.demojize(message.text))
         respond_message(message)
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_handler(call):
+    call.text = emoji.demojize(call.message.text)
+    respond_callback(call)
 
 bot.set_update_listener(handle_messages)
 # ------------------------------------

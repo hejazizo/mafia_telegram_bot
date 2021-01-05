@@ -1,18 +1,32 @@
+from datetime import datetime
+
+import pytz
+
 from actions import *
 from utils import edit_message_text
 
+
 def generate_users_list(game, code, state_info=None):
+    tz = pytz.timezone('America/Edmonton')
+    edmonton_now = datetime.now(tz)
 
-    response = ":game_die: Mafia Game\n"
-    response += f":input_latin_uppercase: Join Code: <code>{code}</code>\n\n"
+    response = f":game_die: بازی مافیا\n"
 
-    response += ":busts_in_silhouette: Players\n"
     for ind, row in enumerate(game):
-        response += f"{ind+1}. <b>{row.user.name}</b> (@{row.user.username}) \n"
+        if row.role == "GOD":
+            response += f":smiling_face_with_halo: خدا: <b>{f2p(row.user.name)}</b> (@{row.user.username}) \n\n"
+
+            response += ":busts_in_silhouette: بازیکن‌ها\n"
+            if len(game) == 1:
+                response += "در حال انتظار...\n"
+            continue
+        response += f"{n2p(ind)}. <b>{f2p(row.user.name)}</b> (@{row.user.username}) \n"
 
     response += "\n"
-    response += ":hourglass_not_done: Waiting for other players to join...\n"
-    response += f":link: Invite Link: https://t.me/Mafianetgame_bot?start={code}"
+    response += "-"*30 + "\n"
+    response += f":calendar: {edmonton_now.strftime('%d %B, %Y - %H:%M %Z')}\n"
+    response += f":link: Invite Link: https://t.me/Mafianetgame_bot?start={code}\n"
+    response += f":input_latin_uppercase: Join Code: <code>{code}</code>\n\n"
 
     return response
 

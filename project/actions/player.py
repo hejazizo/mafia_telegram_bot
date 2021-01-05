@@ -12,7 +12,7 @@ def player_start(message, user):
         )
 
         # update tracker
-        Tracker.update(state='start').where(Tracker.id==message.chat.id).execute()
+        update_state(user, 'start')
 
         # update list of players
         # 1. get game code 2. delete player from list
@@ -55,7 +55,7 @@ def player_start(message, user):
             update_users_list(code)
 
         else:
-            response = f":cross_mark: There are no games running with the code: {message.text}.\n\n"
+            response = f":cross_mark: There are no games running with the code: <code>{message.text}</code>.\n\n"
             response += "Try again..."
             send_message(
                 message.chat.id,
@@ -83,4 +83,4 @@ def player_leave(message, user):
     )
 
     # update tracker
-    Tracker.update(state='join_game').where(Tracker.id==message.chat.id).execute()
+    update_state(user, 'join_game')

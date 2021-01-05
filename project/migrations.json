@@ -6,6 +6,7 @@
     "models.Tracker",
     "models.Game",
     "models.User",
-    "models.Poll"
+    "models.Poll",
+    "models.GameSettings"
   ]
 }

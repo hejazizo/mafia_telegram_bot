@@ -28,7 +28,12 @@ def create_inline_keyboard(json_string):
 class Keyboards:
     def __init__(self):
         self.main = create_keyboard(
-            keys=[":desktop_computer: Host a Game", ":game_die: Join a Game"]
+            keys=[
+                ":desktop_computer: Host a Game",
+                ":game_die: Join a Game",
+                ":bust_in_silhouette: Change Name",
+                ":gear_selector: Settings"
+            ]
         )
         self.join_game = create_keyboard(
             keys=[':cross_mark: Leave']

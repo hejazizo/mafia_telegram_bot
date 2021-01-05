@@ -7,24 +7,37 @@ import emoji
 from actions.host import (host_leave, host_roles_poll, host_select_roles,
                           host_send_roles, host_start)
 from actions.player import player_leave, player_start
+from actions.settings import edit_game_settings
 from actions.utils import generate_users_list, update_users_list
 from bot import bot
 from constants import BOT_ID
 from keyboards import create_keyboard, keyboards
-from models import Game, Poll, Tracker, User, db
-from utils import send_message
+from models import Game, GameSettings, Poll, Tracker, User, db
+from utils import send_message, update_state
+from callbacks.game_settings import respond_game_settings
+from finglish import f2p
 
 # ------------------------------------
 # Connect to database
 # ------------------------------------
 db.connect()
-db.create_tables([Tracker, Game])
+# db.create_tables([Tracker, Game])
+
+def respond_callback(call):
+    user = User.get_or_none(id=call.from_user.id)
+    if not user:
+        send_message(call.from_user.id, ":cross_mark: Not a registered user. Please click on /start.")
+        return
+
+    if call.text == ":gear_selector: Game Settings":
+        respond_game_settings(call, user)
 
 
 def respond_message(message):
 
     if message.text.startswith('/start'):
         register_user(message)
+
 
     message.text = emoji.demojize(message.text)
     t = Tracker.get_or_none(Tracker.id == message.chat.id)
@@ -33,6 +46,12 @@ def respond_message(message):
     if not t or not user:
         send_message(message.chat.id, ":cross_mark: Not a registered user. Please click on /start.")
         return
+
+    # update the username with every message
+    # this is important as it is the only way to find out the user identity
+    User.update(
+        username=message.chat.username,
+    ).where(User.id==message.chat.id).execute()
 
     # ------------------------------------
     # HOST a game
@@ -70,6 +89,42 @@ def respond_message(message):
     elif t.state == 'start' and match:
         player_start(message, user)
 
+    # ------------------------------------
+    # Change Name
+    # ------------------------------------
+    if t.state == 'start' and message.text == ":bust_in_silhouette: Change Name":
+        update_state(user, 'change_name')
+        text = f":bust_in_silhouette: Current name: <b>{f2p(user.name)}</b>\n\n"
+        text += ":input_latin_letters: Enter your new name:"
+        send_message(
+            user.id,
+            text,
+            reply_markup=create_keyboard([":cross_mark: Discard"])
+        )
+
+    elif t.state == 'change_name' and message.text == ":cross_mark: Discard":
+        update_state(user, 'start')
+        send_message(user.id, ":cross_mark: Discard", reply_markup=keyboards.main)
+
+    elif t.state == 'change_name':
+        if len(message.text) > 100:
+            send_message(user.id, "Name length must be less than 100 characters.")
+            return
+
+        User.update(name=message.text).where(User.id==user.id).execute()
+        update_state(user, 'start')
+        send_message(
+            user.id,
+            f":white_heavy_check_mark: Your Name is updated now to: <b>{message.text}</b>",
+            reply_markup=keyboards.main
+        )
+
+    # ------------------------------------
+    # Settings
+    # ------------------------------------
+    if t.state == 'start' and message.text == ":gear_selector: Settings":
+        edit_game_settings(message, user)
+
 
 def respond_poll(poll):
     host_roles_poll(poll)
@@ -78,10 +133,20 @@ def respond_poll(poll):
 def register_user(message):
     user = User.get_or_none(User.id == message.chat.id)
     if user is not None:
-        send_message(
-            message.chat.id,
-            f"Hi again <b>{message.chat.first_name}</b>!",
-        )
+        game = Game.get_or_none(Game.user==user)
+        if game is None:
+            send_message(
+                message.chat.id,
+                f"Hi again <b>{user.name}</b>!",
+                reply_markup=keyboards.main
+            )
+        else:
+            text = f"Hi again <b>{user.name}</b>!\n\n"
+            text += ":game_die: Note that you're in the middle of a game."
+            send_message(
+                message.chat.id,
+                text,
+            )
         return False
 
     send_message(
@@ -90,12 +155,16 @@ def register_user(message):
         reply_markup=keyboards.main
     )
 
+    # tracker and user information
     Tracker.replace(id=message.chat.id).on_conflict_replace().execute()
-
     User.replace(
         id=message.chat.id,
         name=message.chat.first_name,
         username=message.chat.username,
     ).on_conflict_replace().execute()
+
+    # default game settings for each user
+    user = User.get(User.id == message.chat.id)
+    GameSettings.insert(user=user).execute()
 
     return True

@@ -37,7 +37,7 @@ def host_start(message, user):
     )
 
     # update tracker
-    Tracker.update(state='host_game').where(Tracker.id==message.chat.id).execute()
+    update_state(user, 'host_game')
     Game.update(message_id=out_message.message_id).where(Game.user==user).execute()
 
 
@@ -47,7 +47,7 @@ def host_leave(message, user):
 
     for row in game:
         # update tracker
-        Tracker.update(state='start').where(Tracker.id==row.user.id).execute()
+        update_state(user, 'start')
 
         # send message to all players.
         send_message(
@@ -61,9 +61,10 @@ def host_leave(message, user):
     Poll.delete().where(Poll.user==user).execute()
 
 def host_select_roles(message, user):
-    players = get_players(user)
+    players = get_players(user, include_god=True)
+    num_players = len(players) - 1
     send_message(
-        message.chat.id, f":high_voltage: You have to select {len(players)} roles now...",
+        message.chat.id, f":high_voltage: You have to select {num_players} roles now...",
         reply_markup=keyboards.send_roles
     )
 
@@ -72,14 +73,14 @@ def host_select_roles(message, user):
 
     poll = Poll.select().where(Poll.user==user, Poll.checked==True)
     for player in players:
-        send_current_roles(player.user, poll, len(players))
+        send_current_roles(player.user, poll, num_players)
     # send_message(message.chat.id, f":smiling_face_with_horns: Select Mafia Roles:", reply_markup=keyboards.mafia_roles)
     # send_message(message.chat.id, f":man_police_officer_light_skin_tone: Select Citizen Roles:", reply_markup=keyboards.citizen_roles)
 
 
 def host_send_roles(message, user):
     players = get_players(user)
-    roles = get_roles(user)
+    roles = get_selected_roles(user)
 
     if len(players) > len(roles):
         send_message(user.id, ":cross_mark: " f"تعداد بازیکن‌ها بیشتر از نقش‌هاست.")
@@ -90,23 +91,27 @@ def host_send_roles(message, user):
 
     # shuffle players and send their roles.
     players_id = [player.user.id for player in players]
-    random.shuffle(players_id)
+    random.shuffle(roles)
+
     for role, player_id in zip(roles, players_id):
-        text = "<b>"
-        text += f":bust_in_silhouette: نقش شما: {role}"
-        text += "</b>"
+        text = f":bust_in_silhouette: نقش شما: <b>{role}</b>"
         send_message(player_id, text)
+        Game.update(mafia_role=role).where(Game.id==player_id).execute()
+
+    # get updated players (mafia_role is updated now)
+    players = get_players(user)
+    send_message(user.id, get_player_roles(players))
 
 def send_current_roles(user, poll, num_players, edit=False):
 
     text = ":busts_in_silhouette: نقش‌های انتخاب شده:\n\n"
     for ind, row in enumerate(poll):
-        text += f"{convert_numbers.english_to_persian(ind+1)}. {row.option}\n"
+        text += f"{n2p(ind+1)}. {row.option}\n"
 
     text += "\n\n"
     if len(poll) > num_players:
         text += ":warning_selector: <b>"
-        text += f"{convert_numbers.english_to_persian(len(poll)-num_players)} "
+        text += f"{n2p(len(poll)-num_players)} "
         text += "نقش را حذف کنید.\n"
         text += " ("
         text += f"تعداد بازیکن‌ها: {num_players} | "
@@ -115,7 +120,7 @@ def send_current_roles(user, poll, num_players, edit=False):
         text += "</b>"
     elif len(poll) < num_players:
         text += ":warning_selector: <b>"
-        text += f"{convert_numbers.english_to_persian(num_players-len(poll))} "
+        text += f"{n2p(num_players-len(poll))} "
         text += "نقش دیگر انتخاب کنید.\n"
         text += " ("
         text += f"تعداد بازیکن‌ها: {num_players} - "
@@ -172,20 +177,33 @@ def host_roles_poll(poll):
         ).execute()
 
     user=User.get(id=poll.user.id)
-    players = get_players(user)
+    players = get_players(user, include_god=True)
+    num_players = len(players) - 1
 
     # retrieve data from poll db
     poll = Poll.select().where(Poll.user==user, Poll.checked==True)
     for player in players:
-        send_current_roles(player.user, poll, len(players), edit=True)
+        send_current_roles(player.user, poll, num_players, edit=True)
 
 
-def get_players(user):
+def get_players(user, include_god=False):
     game_code = Game.get(Game.user==user).code
-    players = Game.select().where(Game.code==game_code)
+    if include_god:
+        return Game.select().where(Game.code==game_code)
 
-    return players
+    return Game.select().where(Game.code==game_code, Game.role != "GOD")
 
-def get_roles(user):
+def get_selected_roles(user):
     poll = Poll.select().where(Poll.user==user, Poll.checked==True)
     return [row.option for row in poll]
+
+def get_player_roles(players):
+    text = ":busts_in_silhouette: فهرست نقش‌ها:\n\n"
+    for ind, player in enumerate(players):
+        text += f"{n2p(ind+1)}. "
+
+        text += f"{f2p(player.user.name)} (@{player.user.username}): <b>{player.mafia_role}"
+        text += "</b>"
+        text += "\n"
+
+    return text
