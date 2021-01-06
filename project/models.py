@@ -129,6 +129,15 @@ class GameSettings(BaseModel):
     # lover
     # nothing to add
 
+class GameSettingsKeys(BaseModel):
+    callback_data = TextField()
+    text = TextField()
+    max_value = IntegerField()
+    is_boolean = BooleanField()
+
+    # row and column specify the keys layout
+    row = IntegerField()
+    column = IntegerField()
 
 class Poll(BaseModel):
     poll_id = BigIntegerField()

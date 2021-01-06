@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from models import GameSettingsKeys
 import pytz
 
 from actions import *
@@ -34,6 +34,27 @@ def update_users_list(code):
     game = Game.select().where(
         Game.code==code, Game.state=='start',
     ).order_by(Game.role.asc())
-    for ind, row in enumerate(game):
+    for _, row in enumerate(game):
         updated_response = generate_users_list(game, code)
         edit_message_text(updated_response, chat_id=row.user.id, message_id=row.message_id)
+
+def get_game_settings_key_json_data(to_string=False):
+    json_data = {
+        "inline_keyboard": []
+    }
+    game_settings_keys = GameSettingsKeys.select().order_by(['row, column'])
+
+    for key in game_settings_keys:
+        data = key.__dict__["__data__"]
+
+        # convert True and False to 0 and 1 to avoid json error
+        data["is_boolean"] = int(data["is_boolean"])
+        if key.column == 0:
+            json_data["inline_keyboard"].append([data])
+            continue
+
+        json_data["inline_keyboard"][-1].append(data)
+
+    if to_string:
+        return str(json_data).replace("'", '"')
+    return json_data

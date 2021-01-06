@@ -60,7 +60,7 @@ def host_leave(message, user):
     Game.delete().where(Game.code==code).execute()
     Poll.delete().where(Poll.user==user).execute()
 
-def host_select_roles(message, user):
+def host_select_roles_with_poll(message, user):
     players = get_players(user, include_god=True)
     num_players = len(players) - 1
     send_message(
@@ -77,6 +77,8 @@ def host_select_roles(message, user):
     # send_message(message.chat.id, f":smiling_face_with_horns: Select Mafia Roles:", reply_markup=keyboards.mafia_roles)
     # send_message(message.chat.id, f":man_police_officer_light_skin_tone: Select Citizen Roles:", reply_markup=keyboards.citizen_roles)
 
+def host_select_roles(message, user):
+    pass
 
 def host_send_roles(message, user):
     players = get_players(user)

@@ -1,4 +1,5 @@
 from actions import *
+from actions.utils import get_game_settings_key_json_data
 
 def edit_game_settings(message, user):
     markup = create_game_settings_keyboard(user)
@@ -16,7 +17,7 @@ def create_game_settings_keyboard(user):
     game_settings = GameSettings.get(GameSettings.user==user)
 
     # create keyboard keys
-    json_string = open(Path(ACTIONS_PATH, 'settings.json')).read()
+    json_string = get_game_settings_key_json_data(to_string=True)
     for column, value in game_settings.__dict__["__data__"].items():
         if str(value) == "True":
             value = emoji.emojize(":white_heavy_check_mark:")

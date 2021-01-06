@@ -5,17 +5,18 @@ import string
 import emoji
 
 from actions.host import (host_leave, host_roles_poll, host_select_roles,
-                          host_send_roles, host_start)
+                          host_select_roles_with_poll, host_send_roles,
+                          host_start)
 from actions.player import player_leave, player_start
 from actions.settings import edit_game_settings
 from actions.utils import generate_users_list, update_users_list
 from bot import bot
+from callbacks.game_settings import respond_game_settings
 from constants import BOT_ID
+from finglish import f2p
 from keyboards import create_keyboard, keyboards
 from models import Game, GameSettings, Poll, Tracker, User, db
 from utils import send_message, update_state
-from callbacks.game_settings import respond_game_settings
-from finglish import f2p
 
 # ------------------------------------
 # Connect to database
@@ -65,6 +66,8 @@ def respond_message(message):
 
     # select from a list of roles
     elif t.state == 'host_game' and message.text == ":right_arrow: Next":
+        # FIXME: poll is deactivated. inline keyboard is used now.
+        # host_select_roles_with_poll(message, user)
         host_select_roles(message, user)
 
     # select from a list of roles

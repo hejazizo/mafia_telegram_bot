@@ -6,13 +6,14 @@ from actions.settings import create_game_settings_keyboard
 from bot import bot
 from models import GameSettings
 from utils import answer_callback, edit_message_reply_markup, f2p, n2p
+from actions.utils import get_game_settings_key_json_data
 
-SETTINGS_JSON = json.load(open(Path(ACTIONS_PATH, 'settings.json')))
 
 def respond_game_settings(call, user):
     game_settings = GameSettings.get(GameSettings.user==user)
+    game_settings_key_json = get_game_settings_key_json_data()
 
-    for section in SETTINGS_JSON["inline_keyboard"]:
+    for section in game_settings_key_json["inline_keyboard"]:
         for key in section:
             if call.data != key["callback_data"]:
                 continue
@@ -39,15 +40,11 @@ def respond_game_settings(call, user):
         message_id=message_id,
     )
 
-def update_game_settings(user, new_values):
-    GameSettings.update(**new_values).where(GameSettings.user==user).execute()
-
 def increase_game_settings_value(user, game_settings, column, max_value=5):
     prev_value = game_settings.__dict__['__data__'][column]
     new_value = prev_value + 1
     if new_value > max_value:
         new_value = 0
 
-    update_game_settings(user, {column: new_value})
-
+    GameSettings.update(**{column: new_value}).where(GameSettings.user==user).execute()
     return new_value
