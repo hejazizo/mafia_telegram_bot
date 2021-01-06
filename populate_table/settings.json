@@ -1,0 +1,138 @@
+{
+    "inline_keyboard": [
+        [
+            {
+                "text": "وراثت نقش‌های مافیا: {inheritance}",
+                "callback_data": "inheritance",
+                "max_value": 1
+            }
+        ],
+        [
+            {
+                "text": "مافیای سایه سایر مافیا را می‌شناسد: {shadow_mafia_knows_mafia}",
+                "callback_data": "shadow_mafia_knows_mafia",
+                "max_value": 1
+            }
+        ],
+        [
+            {
+                "text": "تعداد هل مافیای سایه: {shadow_mafia_num_push}",
+                "callback_data": "shadow_mafia_num_push",
+                "max_value": 5
+            }
+        ],
+        [
+            {
+                "text": "تعداد اسلحه مافیای گانگستر: {gangster_mafia_num_guns}",
+                "callback_data": "gangster_mafia_num_guns",
+                "max_value": 5
+            }
+        ],
+        [
+            {
+                "text": "حداقل تعداد کشته مافیا قبل از مذاکره: {negotiator_mafia_num_dead_mafia}",
+                "callback_data": "negotiator_mafia_num_dead_mafia",
+                "max_value": 5
+            }
+        ],
+        [
+            {
+                "text": "تعداد شفای شب دوم دکتر: {doctor_heal_num_2}",
+                "callback_data": "doctor_heal_num_2",
+                "max_value": 5
+            },
+            {
+                "text": "تعداد شفای شب اول دکتر: {doctor_heal_num_1}",
+                "callback_data": "doctor_heal_num_1",
+                "max_value": 5
+            }
+        ],
+        [
+            {
+                "text": "تعداد شفای شب چهارم دکتر: {doctor_heal_num_3}",
+                "callback_data": "doctor_heal_num_3",
+                "max_value": 5
+            },
+            {
+                "text": "تعداد شفای شب سوم دکتر: {doctor_heal_num_4}",
+                "callback_data": "doctor_heal_num_4",
+                "max_value": 5
+            }
+        ],
+        [
+            {
+                "text": "تعداد شفای شب پنجم به بعد دکتر: {doctor_heal_num_5}",
+                "callback_data": "doctor_heal_num_5",
+                "max_value": 5
+            }
+        ],
+        [
+            {
+                "text": "حداکثر دفعاتی که پزشک می‌تواند خودش را خوب کند: {doctor_self_heam_max}",
+                "callback_data": "doctor_self_heam_max",
+                "max_value": 5
+            }
+        ],
+        [
+            {
+                "text": "تعداد گلوله‌های برفی: {snowman_num_shot}",
+                "callback_data": "snowman_num_shot",
+                "max_value": 5
+            }
+        ],
+        [
+            {
+                "text": "تعداد اسلحه‌های مشقی: {gunman_num_fake_guns}",
+                "callback_data": "gunman_num_fake_guns",
+                "max_value": 5
+            },
+            {
+                "text": "تعداد اسلحه‌های واقعی: {gunman_num_real_guns}",
+                "callback_data": "gunman_num_real_guns",
+                "max_value": 5
+            }
+        ],
+        [
+            {
+                "text": "تفنگدار به خودش اسلحه‌ بدهد: {gunman_self_give}",
+                "callback_data": "gunman_self_give",
+                "max_value": 1
+            }
+        ],
+        [
+            {
+                "text": "تفنگدار به خودش اسلحه‌ی واقعی بدهد: {gunman_real_self_give}",
+                "callback_data": "gunman_real_self_give",
+                "max_value": 1
+            }
+        ],
+        [
+            {
+                "text": "حداکثر تعداد تفنگ برای خود تفنگدار: {gunman_max_gun_per_day}",
+                "callback_data": "gunman_max_gun_per_day",
+                "max_value": 5
+            }
+        ],
+        [
+            {
+                "text": "مسیح خودش را شفا دهد: {jesus_self_heal}",
+                "callback_data": "jesus_self_heal",
+                "max_value": 1
+            }
+        ],
+        [
+            {
+                "text": "مهلت شفا بعد از مرگ بازیکن: {jesus_max_nights_passed} شب",
+                "callback_data": "jesus_max_nights_passed",
+                "max_value": 5
+            }
+        ],
+        [
+            {
+                "text": "مهلت شفا بعد از مرگ مسیح: {jesus_heal_deadline_after_death} شب",
+                "callback_data": "jesus_heal_deadline_after_death",
+                "max_value": 5
+            }
+        ]
+    ]
+}

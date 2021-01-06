@@ -2,6 +2,7 @@ from actions import *
 from actions.utils import generate_users_list
 from constants import ROLES
 from utils import next_n
+from models import Role
 
 
 def host_start(message, user):
@@ -47,7 +48,7 @@ def host_leave(message, user):
 
     for row in game:
         # update tracker
-        update_state(user, 'start')
+        update_state(row.user, 'start')
 
         # send message to all players.
         send_message(
@@ -96,13 +97,17 @@ def host_send_roles(message, user):
     random.shuffle(roles)
 
     for role, player_id in zip(roles, players_id):
-        text = f":bust_in_silhouette: نقش شما: <b>{role}</b>"
+        role_db = Role.get(Role.role == role)
+        text = f":bust_in_silhouette: نقش شما: <b>{role}</b>\n"
+        text += f":high_voltage: تیم: <b>{role_db.team}</b>\n\n"
+        text += ":page_facing_up: <b>شرح نقش:</b>\n"
+        text += role_db.description
         send_message(player_id, text)
         Game.update(mafia_role=role).where(Game.id==player_id).execute()
 
     # get updated players (mafia_role is updated now)
     players = get_players(user)
-    send_message(user.id, get_player_roles(players))
+    send_message(user.id, get_players_roles(players))
 
 def send_current_roles(user, poll, num_players, edit=False):
 
@@ -199,7 +204,7 @@ def get_selected_roles(user):
     poll = Poll.select().where(Poll.user==user, Poll.checked==True)
     return [row.option for row in poll]
 
-def get_player_roles(players):
+def get_players_roles(players):
     text = ":busts_in_silhouette: فهرست نقش‌ها:\n\n"
     for ind, player in enumerate(players):
         text += f"{n2p(ind+1)}. "

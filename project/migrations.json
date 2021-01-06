@@ -8,6 +8,7 @@
     "models.User",
     "models.Poll",
     "models.GameSettings",
-    "models.GameSettingsKeys"
+    "models.GameSettingsKeys",
+    "models.Role"
   ]
 }

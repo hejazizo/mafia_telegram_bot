@@ -67,8 +67,8 @@ def respond_message(message):
     # select from a list of roles
     elif t.state == 'host_game' and message.text == ":right_arrow: Next":
         # FIXME: poll is deactivated. inline keyboard is used now.
-        # host_select_roles_with_poll(message, user)
-        host_select_roles(message, user)
+        host_select_roles_with_poll(message, user)
+        # host_select_roles(message, user)
 
     # select from a list of roles
     elif t.state == 'host_game' and message.text == ":envelope: Send Roles":

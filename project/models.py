@@ -83,6 +83,7 @@ class GameSettings(BaseModel):
     doctor_heal_num_3 = IntegerField(default=2)
     doctor_heal_num_4 = IntegerField(default=2)
     doctor_heal_num_5 = IntegerField(default=1)
+    doctor_self_heam_max = IntegerField(default=2)
 
     # nurse
     # nothing to add
@@ -148,7 +149,17 @@ class Poll(BaseModel):
 
 class Role(BaseModel):
     recorder = ForeignKeyField(model=User)
-    default_role = BooleanField(default=False)
+
+    # locked means nobody can delete this role
+    # twhich means it is a default role
+    locked = BooleanField(default=False)
+
     role = TextField()
     team = TextField(default='citizen')
+    callback_data = TextField()
     description = TextField()
+
+    # act time is day, night, etc.
+    act_time = TextField()
+
+    ability = TextField()
