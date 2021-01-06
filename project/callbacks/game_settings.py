@@ -10,6 +10,10 @@ from actions.utils import get_game_settings_key_json_data
 
 
 def respond_game_settings(call, user):
+    """
+    Responds to game settings keys.
+    By each click, it either toggles a value or increases it by one.
+    """
     game_settings = GameSettings.get(GameSettings.user==user)
     game_settings_key_json = get_game_settings_key_json_data()
 
@@ -23,7 +27,7 @@ def respond_game_settings(call, user):
 
             text = key["text"].format(**{call.data : n2p(new_value)})
             # it is a toggle value
-            if key["max_value"] == 1:
+            if key["is_boolean"]:
                 text = key["text"].format(**{call.data : "غیر فعال شد"})
                 if new_value:
                     text = key["text"].format(**{call.data : "فعال شد"})
