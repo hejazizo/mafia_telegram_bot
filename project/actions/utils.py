@@ -26,7 +26,7 @@ def generate_users_list(game, code, state_info=None):
     response += "-"*30 + "\n"
     response += f":calendar: {edmonton_now.strftime('%d %B, %Y - %H:%M %Z')}\n"
     response += f":link: Invite Link: https://t.me/Mafianetgame_bot?start={code}\n"
-    response += f":input_latin_uppercase: Join Code: <code>{code}</code>\n\n"
+    response += f":input_latin_uppercase: Join Code: <code>{code.upper()}</code>\n\n"
 
     return response
 
