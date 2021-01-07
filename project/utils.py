@@ -16,7 +16,8 @@ def send_message(chat_id, text, reply_markup=None, emojize=True):
         text = emoji.emojize(text)
     try:
         return bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup)
-    except:
+    except Exception as e:
+        print(e)
         error_text = f"Unable to send message to {chat_id}.\n\n"
         error_text += "Message content:\n\n"
         error_text += text

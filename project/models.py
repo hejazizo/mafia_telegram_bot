@@ -17,11 +17,15 @@ class BaseModel(Model):
 class User(BaseModel):
     id = IntegerField(primary_key=True)
     name = TextField()
-    username = TextField()
+    username = TextField(null=True)
 
 class Tracker(BaseModel):
     id = IntegerField(primary_key=True)
     state = TextField(default='start')
+
+    # track role menu message id
+    mafia_message_id = IntegerField()
+    citizen_message_id = IntegerField()
 
 class Game(BaseModel):
     id = IntegerField(primary_key=True)
@@ -152,9 +156,9 @@ class Role(BaseModel):
 
     # locked means nobody can delete this role
     # twhich means it is a default role
-    locked = BooleanField(default=False)
+    is_default = BooleanField(default=False)
 
-    role = TextField()
+    role_name = TextField()
     team = TextField(default='citizen')
     callback_data = TextField()
     description = TextField()
@@ -163,3 +167,8 @@ class Role(BaseModel):
     act_time = TextField()
 
     ability = TextField()
+
+class RoleSelectionTracker(BaseModel):
+    user = ForeignKeyField(model=User)
+    role = ForeignKeyField(model=Role)
+    checked = BooleanField(default=False)

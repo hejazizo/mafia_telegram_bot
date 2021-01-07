@@ -9,6 +9,7 @@
     "models.Poll",
     "models.GameSettings",
     "models.GameSettingsKeys",
-    "models.Role"
+    "models.Role",
+    "models.RoleSelectionTracker"
   ]
 }

@@ -21,8 +21,24 @@ def create_keyboard(keys, row_width=2, use_aliases=True):
         )
     return markup
 
-def create_inline_keyboard(json_string):
+def create_inline_keyboard_from_json_string(json_string):
     markup = types.InlineKeyboardMarkup.de_json(json_string)
+    return markup
+
+def create_inline_keyboard(keys, callbacks, row_width=2):
+    markup = types.InlineKeyboardMarkup(row_width=row_width)
+    for ind in range(0, len(keys), row_width):
+        start = ind
+        end = start+row_width
+        if ind+row_width >= len(keys):
+            end = len(keys)
+
+        # add keys to keyboards
+        markup.add(*[
+            types.InlineKeyboardButton(
+                emoji.emojize(key, use_aliases=True), callback_data=callback_data,
+            ) for key, callback_data in zip(keys[start:end], callbacks[start:end])]
+        )
     return markup
 
 class Keyboards:

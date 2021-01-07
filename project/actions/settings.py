@@ -31,4 +31,4 @@ def create_game_settings_keyboard(user):
             f"{{{column}}}", str(value),
         )
 
-    return create_inline_keyboard(json_string)
+    return create_inline_keyboard_from_json_string(json_string)

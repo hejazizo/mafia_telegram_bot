@@ -28,8 +28,8 @@ for ind, line in enumerate(roles):
         if desc:
             Role.insert(
                 recorder=user,
-                locked = True,
-                role = role,
+                is_default = True,
+                role_name = role,
                 team='مافیا',
                 callback_data=role,
                 description=desc,
@@ -40,8 +40,8 @@ for ind, line in enumerate(roles):
         if desc:
             Role.insert(
                 recorder=user,
-                locked = True,
-                role = role,
+                is_default = True,
+                role_name = role,
                 team='شهروند',
                 callback_data=role,
                 description=desc,
@@ -54,8 +54,8 @@ for ind, line in enumerate(roles):
 if desc:
     Role.insert(
         recorder=user,
-        locked = True,
-        role = role,
+        is_default = True,
+        role_name = role,
         team='شهروند',
         callback_data=role,
         description=desc,

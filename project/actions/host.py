@@ -41,7 +41,6 @@ def host_start(message, user):
     update_state(user, 'host_game')
     Game.update(message_id=out_message.message_id).where(Game.user==user).execute()
 
-
 def host_leave(message, user):
     code = Game.get(Game.user==user).code
     game = Game.select().where(Game.code==code)
@@ -79,7 +78,48 @@ def host_select_roles_with_poll(message, user):
     # send_message(message.chat.id, f":man_police_officer_light_skin_tone: Select Citizen Roles:", reply_markup=keyboards.citizen_roles)
 
 def host_select_roles(message, user):
-    pass
+    players = get_players(user, include_god=True)
+    num_players = len(players) - 1
+    send_message(
+        message.chat.id, f":high_voltage: به تعداد بازیکنان یعنی <b>{n2p(num_players)}</b> نقش انتخاب کنید:",
+        reply_markup=keyboards.send_roles
+    )
+
+    # send the roles menu for mafia and citizen roles to user
+    send_role_menu(user)
+
+    for player in players:
+        send_current_roles(player.user, num_players)
+
+def send_role_menu(user):
+    for ind, team in enumerate(['مافیا', 'شهروند']):
+        markup = create_role_selection_menu(user, team)
+        out_message = send_message(
+            user.id,
+            f"{n2p(ind+1)}. نقش‌های <b>{team}</b> را انتخاب کنید.",
+            reply_markup=markup,
+        )
+
+        # update message id to edit later
+        if team == 'مافیا':
+            Tracker.update(mafia_message_id = out_message.message_id).execute()
+        else:
+            Tracker.update(citizen_message_id = out_message.message_id).execute()
+
+def create_role_selection_menu(user, team):
+    selected_roles = RoleSelectionTracker.select().where(RoleSelectionTracker.user==user)
+    keys = []
+    callbacks = []
+    for r in selected_roles:
+        if not r.role.team == team:
+            continue
+        if r.checked:
+            keys.append(f":white_heavy_check_mark: {r.role.role_name}")
+        else:
+            keys.append(f"{r.role.role_name}")
+        callbacks.append(r.role.role_name)
+
+    return create_inline_keyboard(keys, callbacks, row_width=2)
 
 def host_send_roles(message, user):
     players = get_players(user)
@@ -96,20 +136,59 @@ def host_send_roles(message, user):
     players_id = [player.user.id for player in players]
     random.shuffle(roles)
 
-    for role, player_id in zip(roles, players_id):
-        role_db = Role.get(Role.role == role)
-        text = f":bust_in_silhouette: نقش شما: <b>{role}</b>\n"
+    for role_name, player_id in zip(roles, players_id):
+        role_db = Role.get(Role.role_name == role_name)
+        text = f":bust_in_silhouette: نقش شما: <b>{role_name}</b>\n"
         text += f":high_voltage: تیم: <b>{role_db.team}</b>\n\n"
         text += ":page_facing_up: <b>شرح نقش:</b>\n"
         text += role_db.description
         send_message(player_id, text)
-        Game.update(mafia_role=role).where(Game.id==player_id).execute()
+        Game.update(mafia_role=role_name).where(Game.id==player_id).execute()
 
     # get updated players (mafia_role is updated now)
     players = get_players(user)
     send_message(user.id, get_players_roles(players))
 
-def send_current_roles(user, poll, num_players, edit=False):
+def send_current_roles(user, num_players, edit=False):
+
+    text = ":busts_in_silhouette: نقش‌های انتخاب شده:\n\n"
+    selected_roles = RoleSelectionTracker.select().where(RoleSelectionTracker.checked == True)
+    for ind, row in enumerate(selected_roles):
+        text += f"{n2p(ind+1)}. {row.role.role_name}\n"
+
+    text += "\n\n"
+    if len(selected_roles) > num_players:
+        text += ":warning_selector: <b>"
+        text += f"{n2p(len(selected_roles)-num_players)} "
+        text += "نقش را حذف کنید.\n"
+        text += " ("
+        text += f"تعداد بازیکن‌ها: {num_players} | "
+        text += f"تعداد نقش‌ها: {len(selected_roles)}"
+        text += ")"
+        text += "</b>"
+    elif len(selected_roles) < num_players:
+        text += ":warning_selector: <b>"
+        text += f"{n2p(num_players-len(selected_roles))} "
+        text += "نقش دیگر انتخاب کنید.\n"
+        text += " ("
+        text += f"تعداد بازیکن‌ها: {num_players} - "
+        text += f"تعداد نقش‌ها: {len(selected_roles)}"
+        text += ")"
+        text += "</b>"
+    else:
+        text += ":white_heavy_check_mark: <b>"
+        text += "تعداد نقش‌ها و بازیکن‌ها مساوی است."
+        text += "</b>"
+
+    if edit:
+        message_id = Game.get(Game.user==user).message_id
+        edit_message_text(text, user.id, message_id)
+        return
+
+    out_message = send_message(user.id, text)
+    Game.update(message_id=out_message.message_id).where(Game.user==user).execute()
+
+def send_current_roles_with_poll(user, poll, num_players, edit=False):
 
     text = ":busts_in_silhouette: نقش‌های انتخاب شده:\n\n"
     for ind, row in enumerate(poll):
@@ -201,8 +280,8 @@ def get_players(user, include_god=False):
     return Game.select().where(Game.code==game_code, Game.role != "GOD")
 
 def get_selected_roles(user):
-    poll = Poll.select().where(Poll.user==user, Poll.checked==True)
-    return [row.option for row in poll]
+    selected_roles = RoleSelectionTracker.select().where(RoleSelectionTracker.checked == True)
+    return [row.role.role_name for row in selected_roles]
 
 def get_players_roles(players):
     text = ":busts_in_silhouette: فهرست نقش‌ها:\n\n"

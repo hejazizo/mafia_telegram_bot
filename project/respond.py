@@ -12,10 +12,11 @@ from actions.settings import edit_game_settings
 from actions.utils import generate_users_list, update_users_list
 from bot import bot
 from callbacks.game_settings import respond_game_settings
+from callbacks.role_menu import respond_role_menu
 from constants import BOT_ID
 from finglish import f2p
 from keyboards import create_keyboard, keyboards
-from models import Game, GameSettings, Poll, Tracker, User, db
+from models import Game, GameSettings, Poll, Tracker, User, db, RoleSelectionTracker, Role
 from utils import send_message, update_state
 
 # ------------------------------------
@@ -33,6 +34,11 @@ def respond_callback(call):
     if call.text == ":gear_selector: Game Settings":
         respond_game_settings(call, user)
 
+    elif call.text in [
+        "۱. نقش‌های مافیا را انتخاب کنید.",
+        "۲. نقش‌های شهروند را انتخاب کنید."
+    ]:
+        respond_role_menu(call, user)
 
 def respond_message(message):
 
@@ -67,8 +73,8 @@ def respond_message(message):
     # select from a list of roles
     elif t.state == 'host_game' and message.text == ":right_arrow: Next":
         # FIXME: poll is deactivated. inline keyboard is used now.
-        host_select_roles_with_poll(message, user)
-        # host_select_roles(message, user)
+        # host_select_roles_with_poll(message, user)
+        host_select_roles(message, user)
 
     # select from a list of roles
     elif t.state == 'host_game' and message.text == ":envelope: Send Roles":
@@ -150,6 +156,7 @@ def register_user(message):
                 message.chat.id,
                 text,
             )
+
         return False
 
     send_message(
@@ -169,5 +176,18 @@ def register_user(message):
     # default game settings for each user
     user = User.get(User.id == message.chat.id)
     GameSettings.insert(user=user).execute()
+
+    # insert selected roles tracker
+    roles = Role.select().where(Role.is_default==True)
+    data = []
+    for r in roles:
+        data.append((r, user, False))
+    RoleSelectionTracker.insert_many(
+        data, fields=[
+            RoleSelectionTracker.role,
+            RoleSelectionTracker.user,
+            RoleSelectionTracker.checked
+        ]
+    ).execute()
 
     return True
