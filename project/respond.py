@@ -22,8 +22,6 @@ from utils import send_message, update_state
 # ------------------------------------
 # Connect to database
 # ------------------------------------
-db.connect()
-# db.create_tables([Tracker, Game])
 
 def respond_callback(call):
     user = User.get_or_none(id=call.from_user.id)
