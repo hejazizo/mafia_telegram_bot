@@ -111,6 +111,7 @@ def create_role_selection_menu(user, team):
     keys = []
     callbacks = []
     for r in selected_roles:
+        print("here")
         if not r.role.team == team:
             continue
         if r.checked:
