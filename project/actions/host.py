@@ -111,7 +111,6 @@ def create_role_selection_menu(user, team):
     keys = []
     callbacks = []
     for r in selected_roles:
-        print("here")
         if not r.role.team == team:
             continue
         if r.checked:
@@ -148,7 +147,9 @@ def host_send_roles(message, user):
 
     # get updated players (mafia_role is updated now)
     players = get_players(user)
-    send_message(user.id, get_players_roles(players))
+
+    # send roles to GOD
+    # send_message(user.id, get_players_roles(players))
 
 def send_current_roles(user, num_players, edit=False):
 
