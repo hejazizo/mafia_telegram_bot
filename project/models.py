@@ -134,16 +134,6 @@ class GameSettings(BaseModel):
     # lover
     # nothing to add
 
-class GameSettingsKeys(BaseModel):
-    callback_data = TextField()
-    text = TextField()
-    max_value = IntegerField()
-    is_boolean = BooleanField()
-
-    # row and column specify the keys layout
-    row = IntegerField()
-    column = IntegerField()
-
 class Poll(BaseModel):
     poll_id = BigIntegerField()
     user = ForeignKeyField(model=User)
@@ -167,6 +157,19 @@ class Role(BaseModel):
     act_time = TextField()
 
     ability = TextField()
+
+class GameSettingsKeys(BaseModel):
+    callback_data = TextField()
+    text = TextField()
+    max_value = IntegerField()
+    is_boolean = BooleanField()
+
+    # row and column specify the keys layout
+    row = IntegerField()
+    column = IntegerField()
+
+    # # the corressponding role
+    role = ForeignKeyField(model=Role)
 
 class RoleSelectionTracker(BaseModel):
     user = ForeignKeyField(model=User)

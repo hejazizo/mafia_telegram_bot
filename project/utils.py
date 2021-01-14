@@ -4,6 +4,8 @@ import json
 from models import Tracker
 from convert_numbers import english_to_persian as n2p
 from finglish import f2p
+import logging
+import argparse
 
 DEFAULT_CHAT_ID = 73106435
 
@@ -68,3 +70,68 @@ def next_n(iterator, N):
 
 def update_state(user, state):
     Tracker.update(state=state).where(Tracker.id==user.id).execute()
+
+def configure_colored_logging(loglevel):
+    import coloredlogs
+
+    field_styles = coloredlogs.DEFAULT_FIELD_STYLES.copy()
+    field_styles["asctime"] = {}
+    level_styles = coloredlogs.DEFAULT_LEVEL_STYLES.copy()
+    level_styles["debug"] = {}
+    coloredlogs.install(
+        level=loglevel,
+        use_chroot=False,
+        fmt="%(asctime)s %(levelname)-8s %(name)s  - %(message)s",
+        level_styles=level_styles,
+        field_styles=field_styles,
+    )
+
+def add_logging_options(parser):
+    """Add options to an argument parser to configure logging levels."""
+
+    logging_arguments = parser.add_argument_group("Python Logging Options")
+
+    # arguments for logging configuration
+    logging_arguments.add_argument(
+        "-v",
+        "--verbose",
+        help="Be verbose. Sets logging level to INFO.",
+        action="store_const",
+        dest="loglevel",
+        const=logging.INFO,
+    )
+    logging_arguments.add_argument(
+        "-vv",
+        "--debug",
+        help="Print lots of debugging statements. Sets logging level to DEBUG.",
+        action="store_const",
+        dest="loglevel",
+        const=logging.DEBUG,
+    )
+    logging_arguments.add_argument(
+        "--quiet",
+        help="Be quiet! Sets logging level to WARNING.",
+        action="store_const",
+        dest="loglevel",
+        const=logging.WARNING,
+    )
+
+def create_argument_parser() -> argparse.ArgumentParser:
+    """Parse all the command line arguments for the training script."""
+
+    parser = argparse.ArgumentParser(
+        prog="mafiabot",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        description="Mafia Telegram Bot command line interface.",
+    )
+
+    # parser.add_argument(
+    #     "--argument",
+    #     action="store_true",
+    #     default=,
+    #     help="",
+    # )
+
+    add_logging_options(parser)
+
+    return parser

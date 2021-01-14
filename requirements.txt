@@ -6,3 +6,4 @@ PyMySQL
 cryptography
 convert-numbers
 pytz
+coloredlogs
