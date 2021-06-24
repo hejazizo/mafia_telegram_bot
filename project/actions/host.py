@@ -149,7 +149,7 @@ def host_send_roles(message, user):
     players = get_players(user)
 
     # send roles to GOD
-    # send_message(user.id, get_players_roles(players))
+    send_message(user.id, get_players_roles(players))
 
 def send_current_roles(user, num_players, edit=False):
 
